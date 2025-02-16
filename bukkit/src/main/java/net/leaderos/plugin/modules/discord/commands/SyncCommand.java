@@ -35,7 +35,7 @@ public class SyncCommand extends BaseCommand {
 
         RequestUtil.addRequest(player.getUniqueId());
 
-        org.bukkit.Bukkit.getScheduler().runTaskAsynchronously(Bukkit.getInstance(), () -> {
+        Bukkit.getFoliaLib().getScheduler().runAsync((syncTask) -> {
             String link = Shared.getLink() + "/discord/link";
             player.spigot().sendMessage(
                     MDChatAPI.getFormattedMessage(ChatUtil.color(Bukkit.getInstance()

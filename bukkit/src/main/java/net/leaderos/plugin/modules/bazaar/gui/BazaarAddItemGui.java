@@ -113,7 +113,7 @@ public class BazaarAddItemGui {
                         String modelId = ItemUtil.getModelId(item);
                         String enchantments = ItemUtil.getEnchantments(item);
 
-                        org.bukkit.Bukkit.getScheduler().runTaskAsynchronously(Bukkit.getInstance(), () -> {
+                        Bukkit.getFoliaLib().getScheduler().runAsync((task) -> {
                             // Sends response
                             try {
                                 Response postBazaarItem = new AddBazaarItemRequest(userId, name, lore, amount, maxDurability, durability, base64, price, creationDate, modelId, enchantments, serverId, material.name()).getResponse();

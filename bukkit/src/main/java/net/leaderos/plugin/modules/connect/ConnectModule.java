@@ -76,7 +76,7 @@ public class ConnectModule extends LeaderOSModule {
                     });
                 } else {
                     // Execute commands
-                    org.bukkit.Bukkit.getScheduler().runTask(Bukkit.getInstance(), () -> {
+                    Bukkit.getFoliaLib().getScheduler().runNextTick((executeCommandsTask) -> {
                         commands.forEach(command -> {
                             org.bukkit.Bukkit.dispatchCommand(org.bukkit.Bukkit.getConsoleSender(), command);
 

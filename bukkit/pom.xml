@@ -27,12 +27,29 @@
             </resource>
         </resources>
         <plugins>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>3.6.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
                 <configuration>
+                    <createDependencyReducedPom>false</createDependencyReducedPom>
+                    <minimizeJar>false</minimizeJar>
+                    <filters>
+                        <filter>
+                            <artifact>com.github.technicallycoded:FoliaLib</artifact>
+                            <includes>
+                                <include>**</include>
+                            </includes>
+                        </filter>
+                    </filters>
                     <relocations>
                         <relocation>
                             <pattern>com.cryptomorin.xseries</pattern>
@@ -41,6 +58,14 @@
                         <relocation>
                             <pattern>org.bstats</pattern>
                             <shadedPattern>net.leaderos.utils.bstats</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>com.tcoded.folialib</pattern>
+                            <shadedPattern>net.leaderos.lib.folialib</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>com.tcoded.folialib.impl</pattern>
+                            <shadedPattern>net.leaderos.lib.folialib.impl</shadedPattern>
                         </relocation>
                     </relocations>
                     <!-- Here you can remove the classes you don't use. -->
@@ -59,14 +84,6 @@
                         </filter>
                     </filters>
                 </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>
@@ -77,6 +94,11 @@
             <id>minecraft-libraries</id>
             <name>Minecraft Libraries</name>
             <url>https://libraries.minecraft.net/</url>
+        </repository>
+        <!-- Add JitPack repository -->
+        <repository>
+            <id>jitpack</id>
+            <url>https://jitpack.io</url>
         </repository>
     </repositories>
 
@@ -145,6 +167,13 @@
             <groupId>org.bstats</groupId>
             <artifactId>bstats-bukkit</artifactId>
             <version>3.0.2</version>
+            <scope>compile</scope>
+        </dependency>
+        <!-- Add FoliaLib dependency -->
+        <dependency>
+            <groupId>com.github.technicallycoded</groupId>
+            <artifactId>FoliaLib</artifactId>
+            <version>0.4.3</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

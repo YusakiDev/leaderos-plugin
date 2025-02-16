@@ -142,7 +142,7 @@ public class User {
      * loads all player data
      */
     public static void loadAllPlayers() {
-        org.bukkit.Bukkit.getScheduler().runTaskAsynchronously(Bukkit.getInstance(), () ->
+        Bukkit.getFoliaLib().getScheduler().runAsync((loadAllPlayersTask) ->
                 org.bukkit.Bukkit.getOnlinePlayers().forEach(User::loadPlayerCache));
     }
 
