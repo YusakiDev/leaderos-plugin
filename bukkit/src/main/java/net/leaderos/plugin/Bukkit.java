@@ -110,59 +110,11 @@ public class Bukkit extends JavaPlugin {
         commandManager = BukkitCommandManager.create(this);
         setupCommands();
         
-        // Add this debug code before FoliaLib initialization
-        getLogger().info("Debugging FoliaLib classes:");
-        try {
-            Class.forName("net.leaderos.lib.folialib.FoliaLib");
-            getLogger().info("✓ Found FoliaLib main class");
-        } catch (ClassNotFoundException e) {
-            getLogger().warning("✗ Cannot find FoliaLib main class");
-        }
-        
-        try {
-            Class.forName("net.leaderos.lib.folialib.impl.FoliaImplementation");
-            getLogger().info("✓ Found FoliaImplementation class");
-        } catch (ClassNotFoundException e) {
-            getLogger().warning("✗ Cannot find FoliaImplementation class");
-        }
-        
-        // You can also print the actual jar contents
-        try {
-            URL location = getClass().getProtectionDomain().getCodeSource().getLocation();
-            getLogger().info("Plugin JAR location: " + location);
-            
-            JarFile jarFile = new JarFile(new File(location.toURI()));
-            Map<String, Long> packageSizes = new HashMap<>();
-            
-            jarFile.stream().forEach(entry -> {
-                String path = entry.getName();
-                String topPackage = path.split("/")[0];
-                long size = entry.getSize();
-                
-                packageSizes.merge(topPackage, size, Long::sum);
-                if (size > 100000) { // Show files larger than 100KB
-                    getLogger().info("Large file found: " + path + " - Size: " + (size / 1024) + "KB");
-                }
-            });
-            
-            // Print total size per package
-            getLogger().info("Size by package:");
-            packageSizes.forEach((pkg, size) -> 
-                getLogger().info(pkg + ": " + (size / 1024) + "KB")
-            );
-            
-            jarFile.close();
-        } catch (Exception e) {
-            getLogger().warning("Failed to list jar contents: " + e.getMessage());
-        }
-
-        // Original FoliaLib initialization
         try {
             foliaLib = new FoliaLib(this);
         } catch (IllegalStateException e) {
-            getLogger().warning("Failed to initialize FoliaLib. Falling back to default scheduler.");
+            getLogger().warning("Failed to initialize FoliaLib. disabling plugin.");
             getLogger().warning("Error: " + e.getMessage());
-            // You might want to disable the plugin here or implement a fallback scheduling solution
             return;
         }
         
