@@ -61,12 +61,12 @@ public abstract class SocketClient {
         pusher.connect(new ConnectionEventListener() {
             @Override
             public void onConnectionStateChange(ConnectionStateChange change) {
-                System.out.println("LeaderOS Connect: State changed from " + change.getPreviousState() + " to " + change.getCurrentState());
+                Logger.info("LeaderOS Connect: State changed from " + change.getPreviousState() + " to " + change.getCurrentState());
             }
 
             @Override
             public void onError(String message, String code, Exception e) {
-                System.out.println("LeaderOS Connect: There was a problem connecting! " +
+                Logger.error("LeaderOS Connect: There was a problem connecting! " +
                         "\ncode: " + code +
                         "\nmessage: " + message +
                         "\nException: " + e
@@ -81,7 +81,7 @@ public abstract class SocketClient {
 
             @Override
             public void onAuthenticationFailure(String message, Exception e) {
-                System.out.println(
+                Logger.error(
                         String.format("LeaderOS Connect: Authentication failure due to [%s], exception was [%s]", message, e)
                 );
             }
