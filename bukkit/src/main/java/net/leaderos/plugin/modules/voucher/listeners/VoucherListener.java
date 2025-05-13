@@ -86,13 +86,13 @@ public class VoucherListener implements Listener {
         VoucherModule.getVoucherData().set("used", list);
         VoucherModule.getVoucherData().save();
 
-        org.bukkit.Bukkit.getScheduler().runTaskAsynchronously(Bukkit.getInstance(), () -> {
+        Bukkit.getFoliaLib().getScheduler().runAsync((useVoucherTask) -> {
             Response depositResponse = CreditHelper.addCreditRequest(player.getName(), amount);
             if (Objects.requireNonNull(depositResponse).getResponseCode() == HttpURLConnection.HTTP_OK
                     && depositResponse.getResponseMessage().getBoolean("status")) {
 
                 // Calls UpdateCache event for update player's cache
-                org.bukkit.Bukkit.getScheduler().runTask(Bukkit.getInstance(), () -> {
+                Bukkit.getFoliaLib().getScheduler().runNextTick((updateCacheTask) -> {
                     org.bukkit.Bukkit.getPluginManager().callEvent(new UpdateCacheEvent(player.getName(), amount, UpdateType.ADD));
                     awaitingVouchers.remove(String.valueOf(id));
                     remove(player, id);

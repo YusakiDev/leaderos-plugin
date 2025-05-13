@@ -31,7 +31,13 @@ import org.bstats.bukkit.Metrics;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.tcoded.folialib.FoliaLib;
+
 import java.io.File;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.jar.JarFile;
+import java.util.Map;
 
 /**
  * Main class of project
@@ -80,6 +86,12 @@ public class Bukkit extends JavaPlugin {
     private static BukkitCommandManager<CommandSender> commandManager;
 
     /**
+     * FoliaLib
+     */
+    @Getter
+    private static FoliaLib foliaLib;
+
+    /**
      * onLoad override method of spigot library
      */
     public void onLoad() {
@@ -98,7 +110,15 @@ public class Bukkit extends JavaPlugin {
     public void onEnable() {
         commandManager = BukkitCommandManager.create(this);
         setupCommands();
-
+        
+        try {
+            foliaLib = new FoliaLib(this);
+        } catch (IllegalStateException e) {
+            getLogger().warning("Failed to initialize FoliaLib. disabling plugin.");
+            getLogger().warning("Error: " + e.getMessage());
+            return;
+        }
+        
         // Loads modules
         LeaderOSAPI.getModuleManager().registerModule(new VerifyModule());
         LeaderOSAPI.getModuleManager().registerModule(new DiscordModule());
@@ -109,6 +129,7 @@ public class Bukkit extends JavaPlugin {
         LeaderOSAPI.getModuleManager().registerModule(new VoucherModule());
         LeaderOSAPI.getModuleManager().registerModule(new DonationsModule());
         LeaderOSAPI.getModuleManager().registerModule(new ConnectModule());
+        
 
         if (getConfigFile().getSettings().getUrl().equals("https://yourwebsite.com")) {
             getLogger().warning(ChatUtil.getMessage(getLangFile().getMessages().getChangeApiUrl()));
@@ -186,7 +207,7 @@ public class Bukkit extends JavaPlugin {
     }
 
     public void checkUpdate() {
-        org.bukkit.Bukkit.getScheduler().runTaskAsynchronously(Bukkit.getInstance(), () -> {
+        getFoliaLib().getScheduler().runAsync((task) -> {
             PluginUpdater updater = new PluginUpdater(getDescription().getVersion());
             try {
                 if (updater.checkForUpdates()) {
